@@ -10,13 +10,13 @@ public class Order {
     private int userId;
     private LocalDateTime orderDateTime;
     
-	public Order(int orderId, Book bookOrdered, int userId, LocalDateTime orderDateTime) {
+	public Order (Book bookOrdered, int userId, LocalDateTime orderDateTime) {
 		super();
-		this.orderId = orderId;
 		this.bookOrdered = bookOrdered;
 		this.userId = userId;
 		this.orderDateTime = orderDateTime;
 	}
+
 
 	public int getOrderId() {
 		return orderId;

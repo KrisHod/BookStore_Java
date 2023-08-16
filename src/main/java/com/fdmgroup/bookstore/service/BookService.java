@@ -23,23 +23,31 @@ public void setBookRepository(BookRepository bookRepository) {
 }
 
 public List<Book> getAllBooks(){
-	return null;
-	
+	return bookRepository.findAll();
 }
 
 public List<Book> getBooksOfGenre(BookGenre bookGenre){
-	return null;
+	return bookRepository.findByGenre(bookGenre);
 	
 }
 
 public List<Book> searchBooksByTitle(String title){
-	return null;
+	return bookRepository.findByTitleContainingIgnoreCase(title);
 	
 }
 
 public List<Book> searchBooksByAuthorName(String bookAuthorNameToSearch){
-	return null;
+	return bookRepository.findByAuthorContainingIgnoreCase(bookAuthorNameToSearch);
 	
+}
+
+public Book findById(int bookId) throws ItemNotFoundException, UserNotFoundException {
+    Object book = bookRepository.findById(bookId);
+    if (book  instanceof Book) {
+        return (Book) book;
+    } else {
+        throw new UserNotFoundException("User not found.");
+    }
 }
 
 }
