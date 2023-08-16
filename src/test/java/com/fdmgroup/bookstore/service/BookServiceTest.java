@@ -42,6 +42,7 @@ public class BookServiceTest {
 
         // Assert
         assertEquals(expectedBooks, actualBooks);
+        verify(bookRepository).findAll(); // Verify interaction with the mock
     }
 
     @Test
@@ -56,6 +57,7 @@ public class BookServiceTest {
 
         // Assert
         assertEquals(expectedBooks, actualBooks);
+        verify(bookRepository).findByGenre(genre); // Verify interaction with the mock
     }
 
     @Test
@@ -70,6 +72,7 @@ public class BookServiceTest {
 
         // Assert
         assertEquals(expectedBooks, actualBooks);
+        verify(bookRepository).findByTitleContainingIgnoreCase(title); // Verify interaction with the mock
     }
     
     @Test
@@ -84,6 +87,7 @@ public class BookServiceTest {
 
         // Assert
         assertEquals(expectedBooks, actualBooks);
+        verify(bookRepository).findByAuthorContainingIgnoreCase(authorName); // Verify interaction with the mock
     }
 
     @Test
@@ -98,6 +102,7 @@ public class BookServiceTest {
 
         // Assert
         assertEquals(expectedBook, actualBook);
+        verify(bookRepository).findById(bookId); // Verify interaction with the mock
     }
     
     @Test(expected = UserNotFoundException.class)
@@ -108,6 +113,7 @@ public class BookServiceTest {
 
         // Act
         bookService.findById(bookId);
+        verify(bookRepository).findById(bookId); // Verify interaction with the mock
     }
     
 }
