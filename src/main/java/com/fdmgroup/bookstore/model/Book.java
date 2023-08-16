@@ -1,5 +1,6 @@
 package com.fdmgroup.bookstore.model;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Book {
@@ -17,6 +18,17 @@ public class Book {
 		this.title = title;
 		this.author = author;
 		this.bookGenre = bookGenre;
+	}
+	
+	ArrayList<Book> books = new ArrayList<>();
+	
+	public Book findBookByTitle (String title) {
+		for (Book book: books) {
+			if (book.getTitle().equals(title)) {
+				return book;
+			}
+		}
+		return null;
 	}
 
 	public int getItemId() {

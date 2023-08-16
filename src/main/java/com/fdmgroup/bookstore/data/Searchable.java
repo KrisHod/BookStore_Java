@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.fdmgroup.bookstore.model.User;
 
-public interface Searchable {
+public interface Searchable<T> {
 
-	User findById(int id);
-	List <User> findAll();
+	T findById(int id);
+	List <T> findAll();
 	
 }
