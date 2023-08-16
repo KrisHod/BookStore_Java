@@ -20,6 +20,10 @@ public class Book {
 		this.bookGenre = bookGenre;
 	}
 	
+	public Book() {
+		// TODO Auto-generated constructor stub
+	}
+
 	ArrayList<Book> books = new ArrayList<>();
 	
 	public Book findBookByTitle (String title) {
