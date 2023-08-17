@@ -23,6 +23,9 @@ public class User {
 		this.email = email;
 		this.orders = orders;
 	}
+	public User(int i, String username2, String password2) {
+		// TODO Auto-generated constructor stub
+	}
 	public int getUserId() {
 		return userId;
 	}

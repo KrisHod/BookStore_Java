@@ -51,7 +51,7 @@ public class OrderingService {
 		this.authService = authService;
 	}
 
-	public Order placeOder(Book book, User customer) throws UserNotFoundException, ItemNotFoundException {
+	public Order placeOrder(Book book, User customer) throws UserNotFoundException, ItemNotFoundException {
         authService.findById(customer.getUserId());
         bookService.findById(book.getItemId());
 

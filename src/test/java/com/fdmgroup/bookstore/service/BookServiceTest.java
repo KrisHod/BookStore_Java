@@ -1,119 +1,108 @@
 package com.fdmgroup.bookstore.service;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fdmgroup.bookstore.data.BookRepository;
 import com.fdmgroup.bookstore.model.Book;
 import com.fdmgroup.bookstore.model.BookGenre;
-import com.fdmgroup.bookstore.service.BookService;
 
 public class BookServiceTest {
 
-    @Mock
     private BookRepository bookRepository;
-
-    @InjectMocks
     private BookService bookService;
 
-    @Before
+    //created a mock instance of the BookRepository class and pass it to the BookService constructor
+    //when the BookService is tested, it will use the mock repository
+    @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        bookRepository = mock(BookRepository.class);
+        bookService = new BookService(bookRepository);
     }
 
     @Test
     public void testGetAllBooks() {
-        // Arrange
-        List<Book> expectedBooks = Arrays.asList(new Book(), new Book());
-        when(bookRepository.findAll()).thenReturn(expectedBooks);
-
-        // Act
-        List<Book> actualBooks = bookService.getAllBooks();
-
-        // Assert
-        assertEquals(expectedBooks, actualBooks);
-        verify(bookRepository).findAll(); // Verify interaction with the mock
+        List<Book> dummyBooks = new ArrayList<>();
+        dummyBooks.add(new Book(1, 5.5, "Book 1", "Author 1", BookGenre.ACTION));
+        dummyBooks.add(new Book(2, 7, "Book 2", "Author 2", BookGenre.THRILLER));
+        
+        when(bookRepository.findAll()).thenReturn(dummyBooks);
+        
+        List<Book> result = bookService.getAllBooks();
+        
+        assertEquals(dummyBooks, result);
     }
 
     @Test
     public void testGetBooksOfGenre() {
-        // Arrange
-        BookGenre genre = BookGenre.ACTION;
-        List<Book> expectedBooks = Arrays.asList(new Book(), new Book());
-        when(bookRepository.findByGenre(genre)).thenReturn(expectedBooks);
-
-        // Act
-        List<Book> actualBooks = bookService.getBooksOfGenre(genre);
-
-        // Assert
-        assertEquals(expectedBooks, actualBooks);
-        verify(bookRepository).findByGenre(genre); // Verify interaction with the mock
+        List<Book> dummyBooks = new ArrayList<>();
+        dummyBooks.add(new Book(1, 7, "Book 1", "Author 1", BookGenre.ACTION));
+        dummyBooks.add(new Book(2, 6, "Book 2", "Author 2", BookGenre.THRILLER));
+        
+        when(bookRepository.findByGenre(BookGenre.ACTION)).thenReturn(dummyBooks);
+        
+        List<Book> result = bookService.getBooksOfGenre(BookGenre.ACTION);
+        
+        assertEquals(dummyBooks, result);
     }
 
     @Test
     public void testSearchBooksByTitle() {
-        // Arrange
-        String title = "Science Fiction";
-        List<Book> expectedBooks = Arrays.asList(new Book(), new Book());
-        when(bookRepository.findByTitleContainingIgnoreCase(title)).thenReturn(expectedBooks);
-
-        // Act
-        List<Book> actualBooks = bookService.searchBooksByTitle(title);
-
-        // Assert
-        assertEquals(expectedBooks, actualBooks);
-        verify(bookRepository).findByTitleContainingIgnoreCase(title); // Verify interaction with the mock
+        String title = "Harry Potter";
+        
+        List<Book> dummyBooks = new ArrayList<>();
+        dummyBooks.add(new Book(1, 99, "Harry Potter and the Sorcerer's Stone", "J.K. Rowling", BookGenre.ACTION));
+        dummyBooks.add(new Book(2, 109, "Harry Potter and the Chamber of Secrets", "J.K. Rowling", BookGenre.ACTION));
+        
+        when(bookRepository.findByTitleContainingIgnoreCase(title)).thenReturn(dummyBooks);
+        
+        List<Book> result = bookService.searchBooksByTitle(title);
+        
+        assertEquals(dummyBooks, result);
     }
     
     @Test
     public void testSearchBooksByAuthorName() {
-        // Arrange
-        String authorName = "Isaac";
-        List<Book> expectedBooks = Arrays.asList(new Book(), new Book());
-        when(bookRepository.findByAuthorContainingIgnoreCase(authorName)).thenReturn(expectedBooks);
-
-        // Act
-        List<Book> actualBooks = bookService.searchBooksByAuthorName(authorName);
-
-        // Assert
-        assertEquals(expectedBooks, actualBooks);
-        verify(bookRepository).findByAuthorContainingIgnoreCase(authorName); // Verify interaction with the mock
+        String authorName = "J.K. Rowling";
+        
+        List<Book> dummyBooks = new ArrayList<>();
+        dummyBooks.add(new Book(1, 34, "Harry Potter and the Sorcerer's Stone", "J.K. Rowling", BookGenre.ACTION));
+        dummyBooks.add(new Book(2, 66, "Harry Potter and the Chamber of Secrets", "J.K. Rowling", BookGenre.ACTION));
+        
+        when(bookRepository.findByAuthorContainingIgnoreCase(authorName)).thenReturn(dummyBooks);
+        
+        List<Book> result = bookService.searchBooksByAuthorName(authorName);
+        
+        assertEquals(dummyBooks, result);
     }
 
     @Test
-    public void testFindById_BookFound() throws ItemNotFoundException, UserNotFoundException {
-        // Arrange
-        int bookId = 123;
-        Book expectedBook = new Book();
-        when(bookRepository.findById(bookId)).thenReturn(expectedBook);
+    public void testFindById() throws ItemNotFoundException, UserNotFoundException {
+        int bookId = 1;
+        Book dummyBook = new Book(bookId, 8, "Book 1", "Author 1", BookGenre.ACTION);
 
-        // Act
-        Book actualBook = bookService.findById(bookId);
+        when(bookRepository.findById(bookId)).thenReturn(dummyBook);
 
-        // Assert
-        assertEquals(expectedBook, actualBook);
-        verify(bookRepository).findById(bookId); // Verify interaction with the mock
+        Book result = bookService.findById(bookId);
+
+        assertEquals(dummyBook, result);
     }
-    
-    @Test(expected = UserNotFoundException.class)
-    public void testFindById_BookNotFound() throws ItemNotFoundException, UserNotFoundException {
-        // Arrange
-        int bookId = 123;
+
+    @Test
+    public void testFindByIdNotFound() {
+        int bookId = 1;
+
         when(bookRepository.findById(bookId)).thenReturn(null);
 
-        // Act
-        bookService.findById(bookId);
-        verify(bookRepository).findById(bookId); // Verify interaction with the mock
+        assertThrows(UserNotFoundException.class, () -> {
+            bookService.findById(bookId);
+        });
     }
-    
 }
